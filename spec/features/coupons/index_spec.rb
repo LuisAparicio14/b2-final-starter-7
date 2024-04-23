@@ -4,6 +4,14 @@ RSpec.describe 'coupons#index', type: :feature do
   before(:each) do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
+    @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+    @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount40", discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+    @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+    @coupon_4 = Coupon.create!(name: "Discount of 50", code: "Discount50", discount_amount: 50, discount_type: 0, status: 1, merchant_id: @merchant1.id)
+    @coupon_5 = Coupon.create!(name: "Discount of 35", code: "Discount35", discount_amount: 35, discount_type: 0, status: 1, merchant_id: @merchant1.id)
+    @coupon_6 = Coupon.create!(name: "Discount of 45", code: "Discount45", discount_amount: 45, discount_type: 0, status: 1, merchant_id: @merchant1.id)
+
+
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
     @customer_3 = Customer.create!(first_name: "Mariah", last_name: "Carrey")
@@ -11,13 +19,13 @@ RSpec.describe 'coupons#index', type: :feature do
     @customer_5 = Customer.create!(first_name: "Sylvester", last_name: "Nader")
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
-    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2)
+    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_1.id)
     @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2)
     @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2)
     @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2)
     @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2)
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
-    @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1)
+    @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1, coupon_id: @coupon_2.id)
 
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
@@ -39,10 +47,6 @@ RSpec.describe 'coupons#index', type: :feature do
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_6.id)
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
-
-    @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
-    @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount40", discount_amount: 40, discount_type: 1, status: 0, merchant_id: @merchant1.id)
-    @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 0, status: 0, merchant_id: @merchant1.id)
   end
 
   # 2. Merchant Coupon Create 
@@ -117,6 +121,27 @@ RSpec.describe 'coupons#index', type: :feature do
       fill_in 'Discount Amount:', with: 25
       choose :discount_type_percent
       click_button 'Create Coupon'
+    end
+  end
+
+  # 6. Merchant Coupon Index Sorted
+  it "" do
+    # As a merchant
+    # When I visit my coupon index page
+    visit merchant_coupons_path(@merchant1)
+    # I can see that my coupons are separated between active and inactive coupons.
+    within '.Active' do
+      expect(page).to have_content("Active Coupons:")
+      expect(page).to have_content("Name: Discount of 20")
+      expect(page).to have_content("Name: Discount of 40")
+      expect(page).to have_content("Name: Discount of 60")
+    end
+
+    within '.Inactive' do
+      expect(page).to have_content("Inactive Coupons:")
+      expect(page).to have_content("Name: Discount of 50")
+      expect(page).to have_content("Name: Discount of 35")
+      expect(page).to have_content("Name: Discount of 45")
     end
   end
 end
