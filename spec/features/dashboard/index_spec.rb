@@ -40,6 +40,10 @@ RSpec.describe "merchant dashboard" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
+    @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+    @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount40", discount_amount: 40, discount_type: 1, status: 0, merchant_id: @merchant1.id)
+    @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 2, status: 0, merchant_id: @merchant1.id)
+
     visit merchant_dashboard_index_path(@merchant1)
   end
 
@@ -118,5 +122,35 @@ RSpec.describe "merchant dashboard" do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+
+  # 1. Merchant Coupons Index 
+  it "link to my coupons index page" do
+    # As a merchant
+    # When I visit my merchant dashboard page
+    # I see a link to view all of my coupons
+    expect(page).to have_link("Coupons")
+    # When I click this link
+    click_link("Coupons")
+    # I'm taken to my coupons index page
+    expect(current_path).to eq(merchant_coupons_path(@merchant1))
+    # Where I see all of my coupon names including their amount off 
+    save_and_open_page
+    expect(page).to have_link("Discount of 20")
+    expect(page).to have_content("Name: Discount of 20")
+    expect(page).to have_content("Amount off: 20")
+
+    expect(page).to have_link("Discount of 40")
+    expect(page).to have_content("Name: Discount of 40")
+    expect(page).to have_content("Amount off: 40")
+
+
+    expect(page).to have_link("Discount of 60")
+    expect(page).to have_content("Name: Discount of 60")
+    expect(page).to have_content("Amount off: 60")
+
+    click_on("Discount of 20")
+    # And each coupon's name is also a link to its show page.
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon_1))
   end
 end

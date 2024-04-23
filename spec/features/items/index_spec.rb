@@ -168,7 +168,4 @@ describe "merchant items index" do
       expect(page).to have_content("Top selling date for #{@item_8.name} was #{@item_8.best_day}")
     end
   end
-  it "" do
-    
-  end
 end
