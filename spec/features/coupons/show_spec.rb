@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'coupon#show', type: :feature do
   before(:each) do
     @merchant1 = Merchant.create!(name: "Hair Care")
-    
+
     @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount40", discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 0, status: 0, merchant_id: @merchant1.id)
@@ -21,7 +21,7 @@ RSpec.describe 'coupon#show', type: :feature do
     @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2)
     @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2)
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
-    @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1)
+    @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1, coupon_id: @coupon_2.id)
 
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
@@ -60,5 +60,35 @@ RSpec.describe 'coupon#show', type: :feature do
     expect(page).to have_content("Status: active")
     # And I see a count of how many times that coupon has been used.
     expect(page).to have_content("Used: 1")
+  end
+
+  # 4. Merchant Coupon Deactivate
+  it "" do
+    # As a merchant 
+    # When I visit one of my active coupon's show pages
+    visit merchant_coupon_path(@merchant1, @coupon_1)
+    # I see a button to deactivate that coupon
+    expect(page).to have_content("Deactivate #{@coupon_1.name}")
+    # When I click that button
+    click_on("Deactivate #{@coupon_1.name}")
+    # I'm taken back to the coupon show page 
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon_1))
+    # And I can see that its status is now listed as 'inactive'.
+    expect(page).to have_content("Activate #{@coupon_1.name}")
+    expect(page).to have_content("Status: inactive")
+  end
+  
+  # * Sad Paths to consider: 
+  it "" do
+    # 1. A coupon cannot be deactivated if there are any pending invoices with that coupon.
+    visit merchant_coupon_path(@merchant1, @coupon_2)
+
+    expect(page).to have_content("Deactivate #{@coupon_2.name}")
+
+    click_on("Deactivate #{@coupon_2.name}")
+
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon_2))
+
+    expect(page).to have_content("Coupon still in use")
   end
 end

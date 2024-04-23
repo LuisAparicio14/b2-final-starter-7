@@ -33,14 +33,18 @@ describe Merchant do
       @customer1 = create(:customer)
       @customer2 = create(:customer)
 
-      @invoice1 = create(:invoice, customer: @customer1, status: 2)
-      @invoice2 = create(:invoice, customer: @customer2, status: 2)
-      @invoice3 = create(:invoice, customer: @customer2, status: 2)
-      @invoice4 = create(:invoice, customer: @customer1, status: 2)
-      @invoice5 = create(:invoice, customer: @customer2, status: 2)
-      @invoice6 = create(:invoice, customer: @customer1, status: 2)
-      @invoice7 = create(:invoice, customer: @customer2, status: 2)
-      @invoice8 = create(:invoice, customer: @customer2, status: 2)
+      @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+      @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount40", discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+      @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+  
+      @invoice1 = create(:invoice, customer: @customer1, status: 2, coupon_id: @coupon_1.id)
+      @invoice2 = create(:invoice, customer: @customer2, status: 2, coupon_id: @coupon_2.id)
+      @invoice3 = create(:invoice, customer: @customer2, status: 2, coupon_id: @coupon_3.id)
+      @invoice4 = create(:invoice, customer: @customer1, status: 2, coupon_id: @coupon_1.id)
+      @invoice5 = create(:invoice, customer: @customer2, status: 2, coupon_id: @coupon_2.id)
+      @invoice6 = create(:invoice, customer: @customer1, status: 2, coupon_id: @coupon_3.id)
+      @invoice7 = create(:invoice, customer: @customer2, status: 2, coupon_id: @coupon_1.id)
+      @invoice8 = create(:invoice, customer: @customer2, status: 2, coupon_id: @coupon_2.id)
 
       InvoiceItem.create!(invoice: @invoice1, item: @item1, unit_price: 100, quantity: 5, status: 1) # merchant 1: 500
       InvoiceItem.create!(invoice: @invoice2, item: @item2, unit_price: 100, quantity: 1, status: 1)

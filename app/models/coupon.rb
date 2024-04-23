@@ -11,7 +11,7 @@ class Coupon < ApplicationRecord
   belongs_to :merchant
   has_many :invoices
 
-  enum status: [:active, :deactive]
+  enum status: [:active, :inactive]
   enum discount_type: [:percent, :dollar]
 
   def used
