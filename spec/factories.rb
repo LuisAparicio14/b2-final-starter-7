@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :coupon do
     name { "String" }
     discount_amount { 1 }
-    discount_type { 1 }
+    discount_type { 0 }
     status { 0 }
     merchant
   end

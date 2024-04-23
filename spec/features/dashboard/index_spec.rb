@@ -42,7 +42,9 @@ RSpec.describe "merchant dashboard" do
 
     @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount40", discount_amount: 40, discount_type: 1, status: 0, merchant_id: @merchant1.id)
-    @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 2, status: 0, merchant_id: @merchant1.id)
+    @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+    @coupon_4 = Coupon.create!(name: "Discount of 45", code: "Discount45", discount_amount: 45, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+    @coupon_5 = Coupon.create!(name: "Discount of 35", code: "Discount35", discount_amount: 35, discount_type: 1, status: 0, merchant_id: @merchant1.id)
 
     visit merchant_dashboard_index_path(@merchant1)
   end
@@ -135,7 +137,6 @@ RSpec.describe "merchant dashboard" do
     # I'm taken to my coupons index page
     expect(current_path).to eq(merchant_coupons_path(@merchant1))
     # Where I see all of my coupon names including their amount off 
-    save_and_open_page
     expect(page).to have_link("Discount of 20")
     expect(page).to have_content("Name: Discount of 20")
     expect(page).to have_content("Amount off: 20")
