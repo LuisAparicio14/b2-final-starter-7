@@ -7,6 +7,8 @@ RSpec.describe 'coupon#show', type: :feature do
     @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount40", discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+    @coupon_4 = Coupon.create!(name: "Discount of 50", code: "Discount50", discount_amount: 60, discount_type: 0, status: 1, merchant_id: @merchant1.id)
+
 
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
@@ -63,7 +65,7 @@ RSpec.describe 'coupon#show', type: :feature do
   end
 
   # 4. Merchant Coupon Deactivate
-  it "" do
+  it "has a button to deactivate" do
     # As a merchant 
     # When I visit one of my active coupon's show pages
     visit merchant_coupon_path(@merchant1, @coupon_1)
@@ -79,7 +81,7 @@ RSpec.describe 'coupon#show', type: :feature do
   end
   
   # * Sad Paths to consider: 
-  it "" do
+  it "sad path for deactivated if there are any pending invoices" do
     # 1. A coupon cannot be deactivated if there are any pending invoices with that coupon.
     visit merchant_coupon_path(@merchant1, @coupon_2)
 
@@ -90,5 +92,21 @@ RSpec.describe 'coupon#show', type: :feature do
     expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon_2))
 
     expect(page).to have_content("Coupon still in use")
+  end
+
+  # 5. Merchant Coupon Activate
+  it "has a button to activate" do
+    # As a merchant 
+    # When I visit one of my inactive coupon show pages
+    visit merchant_coupon_path(@merchant1, @coupon_4)
+    # I see a button to activate that coupon
+    expect(page).to have_button("Activate #{@coupon_4.name}")
+    # When I click that button
+    click_on("Activate #{@coupon_4.name}")
+    # I'm taken back to the coupon show page 
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon_4))
+    # And I can see that its status is now listed as 'active'.
+    expect(page).to have_button("Deactivate #{@coupon_4.name}")
+    expect(page).to have_content("Status: active")
   end
 end
