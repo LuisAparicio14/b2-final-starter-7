@@ -1,22 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Coupon, type: :model do
-  describe 'validations' do
-    it { should validate_presence_of(:name)}
-    it { should validate_presence_of(:code)}
-    it { should validate_presence_of(:discount_amount)}
-    it { should validate_presence_of(:discount_type)}
-    it { should validate_presence_of(:status)}
-  end
-
-  describe 'relationships' do
-    it {should belong_to(:merchant)}
-    it { should have_many :invoices }
-  end
-
+RSpec.describe 'coupon#show', type: :feature do
   before(:each) do
     @merchant1 = Merchant.create!(name: "Hair Care")
-
+    
     @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount40", discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount60", discount_amount: 60, discount_type: 0, status: 0, merchant_id: @merchant1.id)
@@ -56,11 +43,22 @@ RSpec.describe Coupon, type: :model do
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_6.id)
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
+
   end
-  
-  describe "#used" do
-    it "returns the usage of the coupon from the success transaction" do
-      expect(@coupon_1.used).to eq(1)
-    end
+
+  # 3. Merchant Coupon Show Page 
+  it "coupon show page" do
+    # As a merchant 
+    # When I visit a merchant's coupon show page 
+    visit merchant_coupon_path(@merchant1, @coupon_1)
+    # I see that coupon's name and code 
+    expect(page).to have_content("Name: Discount of 20")
+    expect(page).to have_content("Code: Discount20")
+    # And I see the percent/dollar off value
+    expect(page).to have_content("Off: 20")
+    # As well as its status (active or inactive)
+    expect(page).to have_content("Status: active")
+    # And I see a count of how many times that coupon has been used.
+    expect(page).to have_content("Used: 1")
   end
 end

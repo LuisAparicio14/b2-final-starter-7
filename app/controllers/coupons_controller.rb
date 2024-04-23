@@ -5,11 +5,10 @@ class CouponsController < ApplicationController
   end
 
   def show
-
+    @coupon = Coupon.find(params[:id])
   end
 
   def new
-    @coupon = Coupon.new
   end
 
   def create
@@ -37,6 +36,6 @@ class CouponsController < ApplicationController
   end
   
   def coupon_params
-    params.permit(:name, :code, :discount_amount, :discount_type)
+    params.permit(:name, :code, :discount_amount, :discount_type, :status, :merchant_id)
   end
 end

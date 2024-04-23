@@ -9,7 +9,12 @@ class Coupon < ApplicationRecord
   validates_uniqueness_of :code
 
   belongs_to :merchant
+  has_many :invoices
 
   enum status: [:active, :deactive]
   enum discount_type: [:percent, :dollar]
+
+  def used
+    invoices.joins(:transactions).where(transactions: {result: [:success]}).count
+  end
 end

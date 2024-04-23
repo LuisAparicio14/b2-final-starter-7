@@ -113,7 +113,7 @@ RSpec.describe 'coupons#index', type: :feature do
     click_link 'Create New Coupon'
     within '.new_coupon' do
       fill_in 'Name:', with: 'Duplicate Coupon'
-      fill_in 'Code:', with: 'CODE1'  # Duplicate code
+      fill_in 'Code:', with: 'Discount20'  # Duplicate code
       fill_in 'Discount Amount:', with: 25
       choose :discount_type_percent
       click_button 'Create Coupon'
