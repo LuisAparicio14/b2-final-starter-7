@@ -13,7 +13,16 @@
     </section>
       <% end %>
   <p>Created on: <%= @invoice.created_at.strftime("%A, %B %d, %Y") %>
+
+  <% if @invoice.coupon %>
+    <p><%= @invoice.coupon.name %></p>
+    <p><%= @invoice.coupon.code %></p>
+  <% else %>
+    No Coupon Applied
+  <% end %>
+
   <p>Total Revenue: <%= number_to_currency(@invoice.total_revenue) %>
+  <p>Grand Total: $<%= number_with_precision(@invoice.grand_total / 100, :precision => 2, :delimiter => ",") %>
 
   <h4>Customer:</h4>
     <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %><br>

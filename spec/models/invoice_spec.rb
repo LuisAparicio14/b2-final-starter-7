@@ -10,6 +10,7 @@ RSpec.describe Invoice, type: :model do
     it { should have_many(:items).through(:invoice_items) }
     it { should have_many(:merchants).through(:items) }
     it { should have_many :transactions}
+    it { should belong_to(:coupon).optional}
   end
   describe "instance methods" do
     it "total_revenue" do
@@ -37,7 +38,7 @@ RSpec.describe Invoice, type: :model do
     @item_2 = Item.create!(name: 'Conditioner', description: 'This makes your hair shiny', unit_price: 8, merchant_id: @merchant1.id)
   end
 
-  it "" do
+  it "#grand_total" do
     invoice = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_1.id)
     InvoiceItem.create!(invoice_id: invoice.id, item_id: @item_1.id, quantity: 3, unit_price: 40, status: 0)
     expect(invoice.grand_total).to eq(100)

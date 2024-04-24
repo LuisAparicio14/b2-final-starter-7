@@ -86,6 +86,9 @@ describe Merchant do
       @item_5 = Item.create!(name: "Bracelet", description: "Wrist bling", unit_price: 200, merchant_id: @merchant2.id)
       @item_6 = Item.create!(name: "Necklace", description: "Neck bling", unit_price: 300, merchant_id: @merchant2.id)
 
+      @coupon_1 = Coupon.create!(name: 'Discount of 20', code: 'Discount20', discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+      @coupon_2 = Coupon.create!(name: 'Discount of 40', code: 'Discount40', discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant1.id)  
+
       @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
       @customer_2 = Customer.create!(first_name: 'Cecilia', last_name: 'Jones')
       @customer_3 = Customer.create!(first_name: 'Mariah', last_name: 'Carrey')
@@ -93,7 +96,7 @@ describe Merchant do
       @customer_5 = Customer.create!(first_name: 'Sylvester', last_name: 'Nader')
       @customer_6 = Customer.create!(first_name: 'Herber', last_name: 'Kuhn')
 
-      @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-27 14:54:09")
+      @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-27 14:54:09", coupon_id: @coupon_1.id)
       @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-26 14:54:09")
       @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2, created_at: "2012-03-05 14:54:09")
       @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2, created_at: "2012-03-27 14:54:09")
@@ -121,6 +124,10 @@ describe Merchant do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
 
+    end
+
+    it "#active_coupons_count" do
+      expect(@merchant1.active_coupons_count).to eq(2)
     end
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@ii_1, @ii_2, @ii_4, @ii_6, @ii_7, @ii_8, @ii_9, @ii_10])

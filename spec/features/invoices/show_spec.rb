@@ -6,7 +6,7 @@ RSpec.describe "invoices show" do
     @merchant2 = Merchant.create!(name: "Jewelry")
 
     @coupon_1 = Coupon.create!(name: "Discount of 20", code: "Discount20", discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
-    @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount15", discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant2.id)
+    @coupon_2 = Coupon.create!(name: "Discount of 40", code: "Discount15", discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_3 = Coupon.create!(name: "Discount of 60", code: "Discount65", discount_amount: 60, discount_type: 0, status: 0, merchant_id: @merchant1.id)
     @coupon_4 = Coupon.create!(name: "Discount of 50", code: "Discount55", discount_amount: 50, discount_type: 0, status: 1, merchant_id: @merchant1.id)
     @coupon_5 = Coupon.create!(name: "Discount of 35", code: "Discount33", discount_amount: 35, discount_type: 0, status: 1, merchant_id: @merchant1.id)
@@ -98,7 +98,7 @@ RSpec.describe "invoices show" do
   end
 
   # 7. Merchant Invoice Show Page: Subtotal and Grand Total Revenues
-  it "" do
+  it "subtotal and grand total for merchant invoice show page" do
     # As a merchant
     # When I visit one of my merchant invoice show pages
     visit merchant_invoice_path(@merchant1, @invoice_1)

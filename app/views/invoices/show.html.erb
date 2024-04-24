@@ -17,7 +17,11 @@
   <p>Total Revenue: $<%= number_with_precision(@invoice.total_revenue / 100, :precision => 2, :delimiter => ",") %>
   <p>Grand Total: $<%= number_with_precision(@invoice.grand_total / 100, :precision => 2, :delimiter => ",") %>
   
-  <p>Coupon Applied: <%= link_to @invoice.coupon.name,  merchant_coupon_path(@merchant, @invoice.coupon) %> <%= @invoice.coupon.code %></p>
+  <% if @invoice.coupon %>
+    <p>Coupon Applied: <%= link_to @invoice.coupon.name,  merchant_coupon_path(@merchant, @invoice.coupon) %> <%= @invoice.coupon.code %></p>
+  <% else %>
+    No Coupon Applied
+  <% end %>
 
 
   <h4>Customer:</h4>
