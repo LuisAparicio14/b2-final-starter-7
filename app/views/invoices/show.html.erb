@@ -2,7 +2,9 @@
 
 <body>
   <div class="row">
+  
     <p class='col-12'>Invoice #<%= @invoice.id %></p>
+    
   </div>
 
   <div id="current-invoice-status">
@@ -11,7 +13,11 @@
   <br>
 
   <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
-  <p>Total Revenue: <%= @invoice.total_revenue %></p>
+
+  <p>Total Revenue: $<%= number_with_precision(@invoice.total_revenue / 100, :precision => 2, :delimiter => ",") %>
+  <p>Grand Total: $<%= number_with_precision(@invoice.grand_total / 100, :precision => 2, :delimiter => ",") %>
+  
+  <p>Coupon Applied: <%= link_to @invoice.coupon.name,  merchant_coupon_path(@merchant, @invoice.coupon) %> <%= @invoice.coupon.code %></p>
 
 
   <h4>Customer:</h4>

@@ -45,7 +45,6 @@ RSpec.describe 'coupon#show', type: :feature do
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_6.id)
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
-
   end
 
   # 3. Merchant Coupon Show Page 

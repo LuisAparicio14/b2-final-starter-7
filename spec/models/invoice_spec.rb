@@ -24,4 +24,22 @@ RSpec.describe Invoice, type: :model do
       expect(@invoice_1.total_revenue).to eq(100)
     end
   end
+
+  before(:each) do
+    @merchant1 = Merchant.create!(name: 'Hair Care')
+
+    @coupon_1 = Coupon.create!(name: 'Discount of 20', code: 'Discount20', discount_amount: 20, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+    @coupon_2 = Coupon.create!(name: 'Discount of 40', code: 'Discount40', discount_amount: 40, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+
+    @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+
+    @item_1 = Item.create!(name: 'Shampoo', description: 'This washes your hair', unit_price: 10, merchant_id: @merchant1.id)
+    @item_2 = Item.create!(name: 'Conditioner', description: 'This makes your hair shiny', unit_price: 8, merchant_id: @merchant1.id)
+  end
+
+  it "" do
+    invoice = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_1.id)
+    InvoiceItem.create!(invoice_id: invoice.id, item_id: @item_1.id, quantity: 3, unit_price: 40, status: 0)
+    expect(invoice.grand_total).to eq(100)
+  end
 end

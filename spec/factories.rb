@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :coupon do
     name { "String" }
-    discount_amount { 1 }
+    discount_amount { 20 }
     discount_type { 0 }
     status { 0 }
     merchant
@@ -15,7 +15,7 @@ FactoryBot.define do
   factory :invoice do
     status {[0,1,2].sample}
     customer
-    coupon
+    association :coupon, factory: :coupon
   end
 
   factory :merchant do

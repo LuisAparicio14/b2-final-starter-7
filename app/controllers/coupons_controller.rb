@@ -13,7 +13,6 @@ class CouponsController < ApplicationController
 
   def create
     @coupon = @merchant.coupons.build(coupon_params)
-    # require 'pry' ; binding.pry
     max_active_coupons = 5  
     if @merchant.active_coupons_count >= max_active_coupons
       flash[:alert] = "Merchant already has the maximum number of active coupons."

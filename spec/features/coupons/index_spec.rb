@@ -125,7 +125,7 @@ RSpec.describe 'coupons#index', type: :feature do
   end
 
   # 6. Merchant Coupon Index Sorted
-  it "" do
+  it "has the coupon separated in two classes" do
     # As a merchant
     # When I visit my coupon index page
     visit merchant_coupons_path(@merchant1)
