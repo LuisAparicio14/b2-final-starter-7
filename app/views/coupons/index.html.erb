@@ -9,7 +9,8 @@
       <p>Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon.id) %></p>
       <p> Code: <%= coupon.code %></p>
       <p>Discount Type: <%= coupon.discount_type %></p>
-      <p>Amount off: <%= coupon.discount_amount %></p>
+      <p>Amount off: <%= coupon.discount_amount %>%</p>
+      <p>Status: <%= coupon.status %></p>
     <% end %>
   <% end %>
 </section>
@@ -21,7 +22,8 @@
       <p>Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon.id) %></p>
       <p> Code: <%= coupon.code %></p>
       <p>Discount Type: <%= coupon.discount_type %></p>
-      <p>Amount off: <%= coupon.discount_amount %></p>
+      <p>Amount off: <%= coupon.discount_amount %>$</p>
+      <p>Status: <%= coupon.status %></p>
     <% end %>
   <% end %>
 </section>

@@ -29,16 +29,10 @@ class CouponsController < ApplicationController
   end
 
   def update
-    coupon = Coupon.find(params[:id])
-    if @merchant.invoices.completed
-      @merchant.coupons.update!(coupon_params)
-      flash[:alert] = "Status successfully updated"
-    end
-
-    if @merchant.invoices.in_progress
-      flash[:alert] = "Coupon still in use"
-    end
-    redirect_to merchant_coupon_path(@merchant, coupon)
+    @coupon = Coupon.find(params[:id])
+    
+    @coupon.update({status: params[:different_status]})
+    redirect_to merchant_coupon_path(@merchant, @coupon)
   end
     
   private
