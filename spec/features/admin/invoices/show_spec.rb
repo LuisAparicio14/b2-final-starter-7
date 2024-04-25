@@ -84,9 +84,11 @@ describe "Admin Invoices Index Page" do
     visit admin_invoice_path(@i1)
     # I see the name and code of the coupon that was used (if there was a coupon applied)
     # And I see both the subtotal revenue from that invoice (before coupon) and the grand total revenue (after coupon) for this invoice.
-    expect(page).to have_content(@coupon_1.name)
-    expect(page).to have_content(@coupon_1.code)
-    expect(page).to have_content("Total Revenue: $250.00")
-    expect(page).to have_content("Grand Total: $2.30")
+    within '.invoice_coupons' do
+      expect(page).to have_content(@coupon_1.name)
+      expect(page).to have_content(@coupon_1.code)
+      expect(page).to have_content("Total Revenue: $250.00")
+      expect(page).to have_content("Grand Total: $2.00") #20% off
+    end
   end
 end

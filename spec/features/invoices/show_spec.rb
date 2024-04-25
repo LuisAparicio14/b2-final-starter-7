@@ -102,12 +102,15 @@ RSpec.describe "invoices show" do
     # As a merchant
     # When I visit one of my merchant invoice show pages
     visit merchant_invoice_path(@merchant1, @invoice_1)
-    # I see the subtotal for my merchant from this invoice (that is, the total that does not include coupon discounts)
-    expect(page).to have_content("Total Revenue: $1.20")
-    # And I see the grand total revenue after the discount was applied
-    expect(page).to have_content("Grand Total: $1.00")
-    # And I see the name and code of the coupon used as a link to that coupon's show page.
-    expect(page).to have_link(@coupon_1.name, href: merchant_coupon_path(@merchant1, @coupon_1))
-    expect(page).to have_content(@coupon_1.code)
+
+    within '.merchant_coupon_on_invoices' do
+      # I see the subtotal for my merchant from this invoice (that is, the total that does not include coupon discounts)
+      expect(page).to have_content("Total Revenue: $1.20") 
+      # And I see the grand total revenue after the discount was applied
+      expect(page).to have_content("Grand Total: $0.96") #20% off
+      # And I see the name and code of the coupon used as a link to that coupon's show page.
+      expect(page).to have_link(@coupon_1.name, href: merchant_coupon_path(@merchant1, @coupon_1))
+      expect(page).to have_content(@coupon_1.code)
+    end
   end
 end

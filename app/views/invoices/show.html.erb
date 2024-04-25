@@ -14,15 +14,17 @@
 
   <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
 
-  <p>Total Revenue: $<%= number_with_precision(@invoice.total_revenue / 100, :precision => 2, :delimiter => ",") %>
-  <p>Grand Total: $<%= number_with_precision(@invoice.grand_total / 100, :precision => 2, :delimiter => ",") %>
-  
-  <% if @invoice.coupon %>
-    <p>Coupon Applied: <%= link_to @invoice.coupon.name,  merchant_coupon_path(@merchant, @invoice.coupon) %> <%= @invoice.coupon.code %></p>
-  <% else %>
-    No Coupon Applied
-  <% end %>
+  <section class="merchant_coupon_on_invoices">
+    <p>Total Revenue: $<%= number_with_precision(@invoice.total_revenue / 100, :precision => 2, :delimiter => ",") %>
+    <p>Grand Total: $<%= number_with_precision(@invoice.grand_total / 100, :precision => 2, :delimiter => ",") %>
+    
+    <% if @invoice.coupon %>
+      <p>Coupon Applied: <%= link_to @invoice.coupon.name,  merchant_coupon_path(@merchant, @invoice.coupon) %> <%= @invoice.coupon.code %></p>
+    <% else %>
+      No Coupon Applied
+    <% end %>
 
+  </section>
 
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>
